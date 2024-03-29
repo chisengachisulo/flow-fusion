@@ -1,8 +1,27 @@
+import { useState } from "react";
 import { Container, Stack, TextField, Button, Typography } from "@mui/material";
 import LogoImg from "../assets/logo.png";
 import ImageEL from "../components/utilis/ImageEL";
 
+const initForm = {
+  email: "",
+  password: "",
+};
 const AuthScreen = () => {
+  const [isLogin, setIsLogin] = useState(true);
+  const [form, setForm] = useState(initForm);
+  const authText = isLogin
+    ? "Do not have an account?"
+    : "Already have an account?";
+
+  const handleChange = (event) =>
+    setForm((oldForm) => ({
+      ...oldForm,
+      [event.target.name]: event.target.value,
+    }));
+
+  const handleAuth = async () => {};
+
   return (
     <Container
       className="logo"
@@ -19,14 +38,36 @@ const AuthScreen = () => {
         </Typography>
       </Stack>
       <Stack spacing={2}>
-        <TextField label="Email" />
-        <TextField label="Password" />
-        <Button size="large" variant="contained">
-          Login
+        <TextField
+          value={form.email}
+          name="email"
+          onChange={handleChange}
+          label="Email"
+        />
+        <TextField
+          value={form.password}
+          name="password"
+          onChange={handleChange}
+          label="Password"
+        />
+        <Button
+          disabled={!form.email.trim() || !form.password.trim()}
+          onClick={handleAuth}
+          size="large"
+          variant="contained"
+        >
+          {isLogin ? "Login" : "Register"}
         </Button>
       </Stack>
-      <Typography mt={3} textAlign="center">
-        Do not have an account?
+      <Typography
+        sx={{
+          cursor: "pointer",
+        }}
+        onClick={() => setIsLogin((o) => !o)}
+        mt={3}
+        textAlign="center"
+      >
+        {authText}
       </Typography>
     </Container>
   );
